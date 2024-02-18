@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "llm-vista"
+version = "0.1.0"
+description = ""
+authors = ["Manjesh Gowda <Manjesh.Gowda@siriusxm.com>"]
+readme = "README.md"
+packages = [{include = "llm_vista", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
