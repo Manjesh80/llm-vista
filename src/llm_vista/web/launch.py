@@ -5,6 +5,7 @@ from streamlit import runtime
 import sys
 import os
 
+
 def main(*args, **kwargs):
     print(f"******* {args} \n*******")
     print(f"******* {kwargs} \n*******")
@@ -13,5 +14,5 @@ def main(*args, **kwargs):
     else:
         print(f"******* {os.getcwd()} \n*******")
         print(f"******* {os.listdir(os.getcwd())} \n*******")
-        sys.argv = ["streamlit", "run", 'app.py']
+        sys.argv = ["streamlit", "run", "app.py"]
         sys.exit(stcli.main())
