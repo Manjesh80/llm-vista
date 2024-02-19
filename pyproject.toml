@@ -6,10 +6,34 @@ authors = ["Manjesh Gowda <Manjesh.Gowda@siriusxm.com>"]
 readme = "README.md"
 packages = [{include = "llm_vista", from = "src"}]
 
-[tool.poetry.dependencies]
-python = "^3.11"
+[tool.poetry.scripts]
+llm-vista = "llm_vista.web:main"
 
+[tool.poetry.dependencies]
+python = "~3.11"
+rich = "^13.7.0"
+httpx = {version = "^0.26.0", extras = ["http2"]}
+importlib-metadata = "^7.0.1"
+boto3 = "^1.34.44"
+streamlit = "^1.31.1"
+
+
+[tool.poetry.group.tests.dependencies]
+pytest = "^8.0.1"
+coverage = "^7.4.1"
+nox = "^2023.4.22"
+
+
+[tool.poetry.group.docs.dependencies]
+sphinx = {version = "^7.2.6", python = ">=3.8"}
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 100
+
+[tool.coverage.run]
+source = ["llm_vista", "tests"]

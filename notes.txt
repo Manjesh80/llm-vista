@@ -1,0 +1,159 @@
+git init
+git remote add origin https://github.com/Manjesh80/llm-vista.git
+git branch -M main
+git push -u origin main
+
+poetry new --src llm-vista
+poetry check
+poetry add rich
+poetry add httpx --extras=http2
+poetry add importlib-metadata --python='<3.8'
+
+poetry show
+poetry run which python
+
+
+[tool.coverage.report]
+show_missing = true
+
+Run Tests
+
+poetry run python -m unittest discover
+
+what is  use of Poetry scrips
+
+For shortcuts
+
+1 - Edit pyproject.toml:
+
+[tool.poetry.scripts]
+test = 'scripts:test'
+
+in scripts.py
+
+---------
+import subprocess
+
+def test():
+    """
+    Run all unittests. Equivalent to:
+    `poetry run python -u -m unittest discover`
+    """
+    subprocess.run(
+        ['python', '-u', '-m', 'unittest', 'discover']
+    )
+-----------
+
+Now you can run command
+
+poetry run test
+
+How to disable Poetry config environment creation
+
+poetry config virtualenvs.create false
+
+poetry config --list
+
+poetry env list --full-path
+
+poetry env list 
+
+poetry build --format wheel
+
+poetry install --no-root
+poetry install --no-dev
+
+In automated deployment you will need to disable any interactive questions that could keep the installation into a pause.
+poetry install -n
+
+
+Why Poetry Lock ?
+
+If you edit pyproject.toml yourself, remember to update the lock file to reflect your changes:
+
+$ poetry lock --no-update
+Resolving dependencies... (0.1s)
+
+Writing lock file
+Without the --no-update option, Poetry also upgrades each locked dependency to the latest version covered by its constraint.
+
+You can also check if the poetry.lock file is consistent with pyproject.toml:
+
+$ poetry lock --check
+
+------
+
+How do you update dependencies ?
+poetry update
+poetry update rich
+poetry add rich@latest
+poetry add rich@'>=13.3.1'
+
+poetry remove importlib-metadata
+
+------------
+
+What is Poetry shell ?
+
+enter the project environment by launching a shell session with 
+
+poetry shell
+
+then build, install and run commands
+
+-------------
+
+poetry env list
+
+poetry config virtualenvs.in-project true
+
+--------------
+
+How to add dependencies
+
+poetry add --group=tests pytest
+
+poetry add --group=docs sphinx --python='>=3.8'
+
+---------------
+poetry add --group=tests coverage[toml]
+
+poetry run coverage run -m pytest
+
+poetry run coverage report --show-missing
+
+----------------------------
+
+DELETE
+
+import httpx
+from rich.console import Console
+from llm_vista.services import DefaultVectoStore
+
+try:
+    from importlib.metadata import metadata
+except ImportError:
+    from importlib_metadata import metadata
+
+API_URL = "https://en.wikipedia.org/api/rest_v1/page/random/summary"
+USER_AGENT = "{Name}/{Version} (Contact: {Author-email})"
+
+def main():
+     dvs = DefaultVectoStore()
+     print(f"******* {dvs.url} \n******")
+     return dvs.url
+
+def mainX():
+    fields = metadata("llm-vista")
+    headers = {"User-Agent": USER_AGENT.format_map(fields)}
+
+    with httpx.Client(headers=headers, http2=True) as client:
+        response = client.get(API_URL, follow_redirects=True)
+        response.raise_for_status()
+        data = response.json()
+
+    console = Console(width=72, highlight=False)
+    console.print(data["title"], style="bold")
+    console.print()
+    console.print(data["extract"])
+    return True
